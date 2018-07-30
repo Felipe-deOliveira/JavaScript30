@@ -62,13 +62,41 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: right;
+      transform: rotate(90deg);
+      transition: all;
+      transition-timing-function: linear;
     }
-
   </style>
 
   <script>
 
+  function setDate() {  
+    
+    const secondsHand = document.querySelector('.second-hand');
+    const minutesHand = document.querySelector('.min-hand');
+    const hoursHand = document.querySelector('.hour-hand');
 
+
+    const now = new Date();
+    console.log('now: ', now);
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours   = now.getHours();
+
+    const secondsDegrees = ((seconds / 60) * 360) + 90;
+    const minutesDegrees = ((minutes / 60) * 360) + 90;
+    const hoursDegrees = ((hours / 60) * 360) + 90;
+    
+
+    // Template literals -> string literals allowing embedded expressions
+    // which are marked by `${}`
+    secondsHand.style.transform = `rotate(${secondsDegrees}deg)`;
+    minutesHand.style.transform = `rotate(${minutesDegrees}deg)`;
+    hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+  };
+
+    setInterval(setDate, 1000);
   </script>
 </body>
 </html>
