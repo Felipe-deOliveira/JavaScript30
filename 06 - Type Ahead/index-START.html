@@ -10,12 +10,65 @@
   <form class="search-form">
     <input type="text" class="search" placeholder="City or State">
     <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
+      <li>Filter by city or state name</li>
     </ul>
   </form>
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const searchBox = document.querySelector(".search");
+const suggestions = document.querySelector(".suggestions");
+const initialOptions = document.querySelector("li");
+
+searchBox.addEventListener("keyup", displayMatches);
+
+let cities = [];
+
+// fetch the data from our endpoint
+fetch(endpoint)
+  // this returned a promise, so use its json method to convert it to json format
+  .then(response => response.json())
+  // now add the values in the json file to an array
+  .then(data => cities = data);
+
+function findMatches (query, cities) {
+  return cities.filter( place => { 
+    const regex = new RegExp (query, 'gi');
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+function noResults () {
+  suggestions.innerHTML = "";
+  let li = document.createElement("li");
+  li.innerHTML = "No Results Found. Try again";
+  suggestions.appendChild(li);
+}
+
+function reset () {
+  suggestions.innerHTML = "";
+  let li = document.createElement("li");
+  li.innerHTML = "Filter by City or State";
+  suggestions.appendChild(li);
+}
+
+function displayMatches () {
+  const query = searchBox.value;
+
+  if (query != "") {
+    const matches = findMatches(query, cities);
+
+    if(matches) {
+      suggestions.innerHTML = "";
+
+      matches.forEach( function (match) { 
+        let li = document.createElement("li");
+        li.innerHTML = match.city + ', ' + match.state;
+        suggestions.appendChild(li);
+      })
+    } else noResults();
+  } else reset();
+}
+
 
 </script>
   </body>
