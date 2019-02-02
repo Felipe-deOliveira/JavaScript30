@@ -7,6 +7,20 @@
 </head>
 <body>
 <script>
+  
+  keyHistory = [];
+  secret = 'felipe'
+
+  window.addEventListener('keyup', (e) => {
+    keyHistory.push(e.key);
+    keyHistory.splice(-secret.length - 1, keyHistory.length - secret.length);
+    console.log(keyHistory);
+
+    if (keyHistory.join('').includes(secret)) {
+      console.log('yeekite-yeah!');
+      cornify_add();
+    }
+  })
 </script>
 </body>
 </html>
